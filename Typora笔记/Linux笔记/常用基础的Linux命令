@@ -1,0 +1,30 @@
+1.登录命令
+
+```shell
+// 域名进入
+ssh root@yonyou.clould.com
+// ip进入
+ssh root@10.16.5.193
+```
+
+2.执行shell脚本命令
+
+```shell
+需要执行权限
+1.任意路径
+/root/datelog.sh
+2.当前路径
+./datelog.sh
+没有执行权限
+1.任意路径
+sh /root/ datelog.sh
+2.当前路径
+sh datelog.sh
+```
+
+3.设置界面的弹出ip
+
+```shell
+export DISPLAY=10.16.23.16:0.0
+```
+
