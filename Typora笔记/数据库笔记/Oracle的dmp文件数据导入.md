@@ -58,14 +58,53 @@ https://wenku.baidu.com/view/a140067b11661ed9ad51f01dc281e53a580251ea.html?from=
 
 
 
-（1）.创建用户，
-    sqlplus system/manager //登录数据库
-    create user nc652 identified by sys; //创建有个用户名为nc652密码为sys的用户
-(2).给用户进行授权；
-grant connect,dba to nc652;  //nc652进行授权连接和数据库管理员权限
-（3）退出数据库quit;
+（1）创建用户，
+
+```sql
+sqlplus system/manager //登录数据库
+create user 用户名 identified by 密码; //创建有个用户名为nc652密码为sys的用户
+```
+
+
+（2）给用户进行授权；
+
+```sql
+grant connect,dba to 用户;  //nc652进行授权连接和数据库管理员权限
+```
+
+（3）退出数据库quit
+
+```sql
+-- 创建表空间
+create tablespace ncc_tablespace 
+logging 
+datafile 'E:\HR_DIR\user_temp1.dbf'
+size 50m 
+autoextend on 
+next 50m maxsize 20480m 
+extent management local;
+-- 创建扩张表空间
+create temporary tablespace ncc_tablespace_temporary
+tempfile 'E:\HR_DIR\user_temp.dbf' 
+size 50m 
+autoextend on 
+next 50m maxsize 20480m 
+extent management local; 
+-- 给用户赋表空间
 alter user 用户名 default tablespace 表空间
-(4)进行数据库导入：
-impdp nc652/sys@orcl directory=dir dumpfile=EXEDATA.DMP logfile=0719.log  //directory=dir在本台机器上是固定的，
-  dumpfile=EXEDATA.DMP//EXEDATA.DMP为导入的文件logfile=0719.log//0719.log创建的日志文件，名字自定义
-  imp nc/sys@orcl file=dmp文件路径 ignore=Y full=Y
+alter user 用户名 temporary tablespace 表空间
+
+```
+
+
+（4）进行数据库导入
+
+```sql
+impdp 用户名/密码@orcl directory=dir dumpfile=EXEDATA.DMP logfile=0719.log REMAP_SCHEMA=导入文件用户名:用户名
+例子：impdp user/password@orcl directory=dir dumpfile=EXEDATA.DMP logfile=0719.log REMAP_SCHEMA=sourceUser:user
+-- directory=dir在本台机器上是固定的，
+-- dumpfile=EXEDATA.DMP//EXEDATA.DMP为导入的文件
+-- logfile=0719.log//0719.log创建的日志文件，名字自定义
+-- imp nc/sys@orcl file=dmp文件路径 ignore=Y full=Y
+```
+
